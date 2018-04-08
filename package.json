@@ -1,0 +1,28 @@
+{
+  "name": "nodegram",
+  "version": "1.0.0",
+  "description": "webogram for node",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/callmez/nodegram.git"
+  },
+  "keywords": [
+    "telegram",
+    "webogram",
+    "mtproto"
+  ],
+  "author": "callme-z@qq.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/callmez/nodegram/issues"
+  },
+  "homepage": "https://github.com/callmez/nodegram#readme",
+  "dependencies": {
+    "lodash": "^4.17.5",
+    "p-props": "^1.1.0"
+  }
+}
