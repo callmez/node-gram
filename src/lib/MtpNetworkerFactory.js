@@ -355,7 +355,7 @@ const CryptoWorker = require('./CryptoWorker')
   }
 
   MtpNetworker.prototype.checkConnection = function (event) {
-    $rootScope.offlineConnecting = true
+    // $rootScope.offlineConnecting = true
 
     console.log(dT(), 'Check connection', event)
     $timeout.cancel(this.checkConnectionPromise)
@@ -373,15 +373,15 @@ const CryptoWorker = require('./CryptoWorker')
 
     var self = this
     this.sendEncryptedRequest(pingMessage, {timeout: 15000}).then(function (result) {
-      delete $rootScope.offlineConnecting
+      // delete $rootScope.offlineConnecting
       self.toggleOffline(false)
     }, function () {
       console.log(dT(), 'Delay ', self.checkConnectionPeriod * 1000)
       self.checkConnectionPromise = $timeout(self.checkConnection.bind(self), parseInt(self.checkConnectionPeriod * 1000))
       self.checkConnectionPeriod = Math.min(60, self.checkConnectionPeriod * 1.5)
-      $timeout(function () {
-        delete $rootScope.offlineConnecting
-      }, 1000)
+      // $timeout(function () {
+      //   delete $rootScope.offlineConnecting
+      // }, 1000)
     })
   }
 

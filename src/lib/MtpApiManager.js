@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const { $q } = require('./angular')
 const {
   bytesToHex,
@@ -158,7 +159,8 @@ const MtpNetworkerFactory = require('./MtpNetworkerFactory')
     var rejectPromise = function (error) {
         if (!error) {
           error = {type: 'ERROR_EMPTY'}
-        } else if (!angular.isObject(error)) {
+        // } else if (!angular.isObject(error)) {
+        } else if (!_.isObject(error)) {
           error = {message: error}
         }
         deferred.reject(error)
@@ -170,29 +172,29 @@ const MtpNetworkerFactory = require('./MtpNetworkerFactory')
           error.handled = true
         }
 
-        if (!options.noErrorBox) {
-          error.input = method
-          error.stack = stack || (error.originalError && error.originalError.stack) || error.stack || (new Error()).stack
-          setTimeout(function () {
-            if (!error.handled) {
-              if (error.code == 401) {
-                mtpLogOut()['finally'](function () {
-                  if (location.protocol == 'http:' &&
-                    !Config.Modes.http &&
-                    Config.App.domains.indexOf(location.hostname) != -1) {
-                    location.href = location.href.replace(/^http:/, 'https:')
-                  } else {
-                    location.hash = '/login'
-                    AppRuntimeManager.reload()
-                  }
-                })
-              } else {
-                ErrorService.show({error: error})
-              }
-              error.handled = true
-            }
-          }, 100)
-        }
+        // if (!options.noErrorBox) {
+        //   error.input = method
+        //   error.stack = stack || (error.originalError && error.originalError.stack) || error.stack || (new Error()).stack
+        //   setTimeout(function () {
+        //     if (!error.handled) {
+        //       if (error.code == 401) {
+        //         mtpLogOut()['finally'](function () {
+        //           if (location.protocol == 'http:' &&
+        //             !Config.Modes.http &&
+        //             Config.App.domains.indexOf(location.hostname) != -1) {
+        //             location.href = location.href.replace(/^http:/, 'https:')
+        //           } else {
+        //             location.hash = '/login'
+        //             AppRuntimeManager.reload()
+        //           }
+        //         })
+        //       } else {
+        //         ErrorService.show({error: error})
+        //       }
+        //       error.handled = true
+        //     }
+        //   }, 100)
+        // }
       },
       dcID,
       networkerPromise

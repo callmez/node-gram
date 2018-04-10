@@ -1,12 +1,12 @@
 const _ = require('lodash')
-const axios = require('axios')
+const axios = require('axios') // @see https://github.com/axios/axios/issues/925
 
 // @see https://github.com/mattlewis92/angular-bluebird-promises
 
 // In regards to: https://github.com/petkaantonov/bluebird#for-library-authors
 // My reasoning behind not doing this is to prevent bundling bluebird code with this library
 
-var $q = (resolve, reject) => {
+function $q(resolve, reject) {
   return new Promise(resolve, reject);
 }
 

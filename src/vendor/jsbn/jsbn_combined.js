@@ -1,3 +1,5 @@
+const navigator = require('navigator')
+
 // Copyright (c) 2005  Tom Wu
 // All Rights Reserved.
 // See "LICENSE" for details.

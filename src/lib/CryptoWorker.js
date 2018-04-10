@@ -1,6 +1,8 @@
 const { $q, $timeout } = require('./angular')
 const Config = require('./Config')
-const crypto = window.crypto// || require('crypto')
+if (typeof crypto === "undefined" || crypto === null) {
+  var crypto = require('crypto')
+}
 // const Worker = window.Worker// || require('webworker')
 const {
   convertToArrayBuffer,
