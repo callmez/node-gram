@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const axios = require('axios') // @see https://github.com/axios/axios/issues/925
+const axios = require('axios-proxy-fix') // @see https://github.com/axios/axios/issues/925
 
 // @see https://github.com/mattlewis92/angular-bluebird-promises
 
