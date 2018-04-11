@@ -8,6 +8,7 @@ const {
   dT,
   tsNow,
 } = require('./utils')
+const qSync = require('./qSync')
 const Storage = require('./Storage')
 const MtpAuthorizer = require('./MtpAuthorizer')
 const MtpNetworkerFactory = require('./MtpNetworkerFactory')
@@ -36,68 +37,69 @@ const MtpNetworkerFactory = require('./MtpNetworkerFactory')
   //   }
   // }
 
-  // function mtpSetUserAuth (dcID, userAuth) {
-  //   var fullUserAuth = angular.extend({dcID: dcID}, userAuth)
-  //   Storage.set({
-  //     dc: dcID,
-  //     user_auth: fullUserAuth
-  //   })
-  //   telegramMeNotify(true)
-  //   $rootScope.$broadcast('user_auth', fullUserAuth)
-  //
-  //   baseDcID = dcID
-  // }
+  function mtpSetUserAuth (dcID, userAuth) {
+    // var fullUserAuth = angular.extend({dcID: dcID}, userAuth)
+    var fullUserAuth = _.extend({dcID: dcID}, userAuth)
+    Storage.set({
+      dc: dcID,
+      user_auth: fullUserAuth
+    })
+    // telegramMeNotify(true)
+    // $rootScope.$broadcast('user_auth', fullUserAuth)
 
-  // function mtpLogOut () {
-  //   var storageKeys = []
-  //   for (var dcID = 1; dcID <= 5; dcID++) {
-  //     storageKeys.push('dc' + dcID + '_auth_key')
-  //   }
-  //   WebPushApiManager.forceUnsubscribe()
-  //   return Storage.get(storageKeys).then(function (storageResult) {
-  //     var logoutPromises = []
-  //     for (var i = 0; i < storageResult.length; i++) {
-  //       if (storageResult[i]) {
-  //         logoutPromises.push(mtpInvokeApi('auth.logOut', {}, {dcID: i + 1, ignoreErrors: true}))
-  //       }
-  //     }
-  //     return $q.all(logoutPromises).then(function () {
-  //       Storage.remove('dc', 'user_auth')
-  //       baseDcID = false
-  //       telegramMeNotify(false)
-  //       return mtpClearStorage()
-  //     }, function (error) {
-  //       storageKeys.push('dc', 'user_auth')
-  //       Storage.remove(storageKeys)
-  //       baseDcID = false
-  //       error.handled = true
-  //       telegramMeNotify(false)
-  //       return mtpClearStorage()
-  //     })
-  //   })
-  // }
+    baseDcID = dcID
+  }
 
-  // function mtpClearStorage () {
-  //   var saveKeys = ['user_auth', 't_user_auth', 'dc', 't_dc']
-  //   for (var dcID = 1; dcID <= 5; dcID++) {
-  //     saveKeys.push('dc' + dcID + '_auth_key')
-  //     saveKeys.push('t_dc' + dcID + '_auth_key')
-  //   }
-  //   Storage.noPrefix()
-  //   Storage.get(saveKeys).then(function (values) {
-  //     Storage.clear().then(function () {
-  //       var restoreObj = {}
-  //       angular.forEach(saveKeys, function (key, i) {
-  //         var value = values[i]
-  //         if (value !== false && value !== undefined) {
-  //           restoreObj[key] = value
-  //         }
-  //       })
-  //       Storage.noPrefix()
-  //       return Storage.set(restoreObj)
-  //     })
-  //   })
-  // }
+  function mtpLogOut () {
+    var storageKeys = []
+    for (var dcID = 1; dcID <= 5; dcID++) {
+      storageKeys.push('dc' + dcID + '_auth_key')
+    }
+    // WebPushApiManager.forceUnsubscribe()
+    return Storage.get(storageKeys).then(function (storageResult) {
+      var logoutPromises = []
+      for (var i = 0; i < storageResult.length; i++) {
+        if (storageResult[i]) {
+          logoutPromises.push(mtpInvokeApi('auth.logOut', {}, {dcID: i + 1, ignoreErrors: true}))
+        }
+      }
+      return $q.all(logoutPromises).then(function () {
+        Storage.remove('dc', 'user_auth')
+        baseDcID = false
+        // telegramMeNotify(false)
+        return mtpClearStorage()
+      }, function (error) {
+        storageKeys.push('dc', 'user_auth')
+        Storage.remove(storageKeys)
+        baseDcID = false
+        error.handled = true
+        // telegramMeNotify(false)
+        return mtpClearStorage()
+      })
+    })
+  }
+
+  function mtpClearStorage () {
+    var saveKeys = ['user_auth', 't_user_auth', 'dc', 't_dc']
+    for (var dcID = 1; dcID <= 5; dcID++) {
+      saveKeys.push('dc' + dcID + '_auth_key')
+      saveKeys.push('t_dc' + dcID + '_auth_key')
+    }
+    Storage.noPrefix()
+    Storage.get(saveKeys).then(function (values) {
+      Storage.clear().then(function () {
+        var restoreObj = {}
+        angular.forEach(saveKeys, function (key, i) {
+          var value = values[i]
+          if (value !== false && value !== undefined) {
+            restoreObj[key] = value
+          }
+        })
+        Storage.noPrefix()
+        return Storage.set(restoreObj)
+      })
+    })
+  }
 
   function mtpGetNetworker (dcID, options) {
     options = options || {}
@@ -294,24 +296,24 @@ const MtpNetworkerFactory = require('./MtpNetworkerFactory')
     return deferred.promise
   }
 
-  // function mtpGetUserID () {
-  //   return Storage.get('user_auth').then(function (auth) {
-  //     telegramMeNotify(auth && auth.id > 0 || false)
-  //     return auth.id || 0
-  //   })
-  // }
+  function mtpGetUserID () {
+    return Storage.get('user_auth').then(function (auth) {
+      telegramMeNotify(auth && auth.id > 0 || false)
+      return auth.id || 0
+    })
+  }
 
-  // function getBaseDcID () {
-  //   return baseDcID || false
-  // }
+  function getBaseDcID () {
+    return baseDcID || false
+  }
 
   // return {
   module.exports = {
-    // getBaseDcID: getBaseDcID,
-    // getUserID: mtpGetUserID,
+    getBaseDcID: getBaseDcID,
+    getUserID: mtpGetUserID,
     invokeApi: mtpInvokeApi,
     getNetworker: mtpGetNetworker,
-    // setUserAuth: mtpSetUserAuth,
-    // logOut: mtpLogOut
+    setUserAuth: mtpSetUserAuth,
+    logOut: mtpLogOut
   }
 // })

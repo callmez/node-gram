@@ -1,5 +1,7 @@
 const _ = require('lodash')
-const axios = require('axios') // @see https://github.com/axios/axios/issues/925
+const axios = require('axios')
+const Promise = require('bluebird')
+const toArrayBuffer = require('to-arraybuffer')
 
 // @see https://github.com/mattlewis92/angular-bluebird-promises
 
@@ -15,7 +17,9 @@ _.extend($q, {
   resolve: Promise.resolve,
   reject: Promise.reject,
   all: Promise.all,
-  ract: Promise.race
+  race: Promise.race,
+  when: Promise.resolve,
+  props: Promise.props,
 });
 
 //Make bluebird API compatible with angular's subset of Q
@@ -34,17 +38,13 @@ $q.defer = function() {
   return deferred;
 };
 
-$q.when = $q.resolve;
-$q.props = require('p-props')
 const originalAll = $q.all;
 $q.all = function(promises) {
-
   if (typeof promises === 'object' && !Array.isArray(promises)) {
     return $q.props(promises);
   } else {
     return originalAll(promises);
   }
-
 };
 
 const originalThen = $q.prototype.then;
@@ -103,10 +103,17 @@ $timeout.cancel = function(promise) {
   return false;
 };
 
+var $http = axios.create({
+  transformResponse: [
+    // Node 的buffer 和 chrome的 ArrayBuffer 有差异, 所以不发送buffer格式
+    data => Buffer.isBuffer(data) ? toArrayBuffer(data) : data
+  ]
+})
+
 module.exports = {
   $q,
   $timeout,
-  $http: axios.create(),
+  $http,
   $interval: (fn, delay) => {
     return new Promise((resolve, reject) => {
       setInterval(() => {

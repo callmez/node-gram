@@ -111,4 +111,8 @@ Config.CountryCodes = [['AB', 'country_select_modal_country_ab', '+7 840', '+7 9
 
 Config.LangCountries = {'es': 'ES', 'ru': 'RU', 'en': 'US', 'de': 'DE', 'it': 'IT', 'nl': 'NL', 'fr': 'FR', 'ca': 'ES', 'es-419': 'MX', 'ar': 'SA', 'he': 'IL', 'tr': 'TR', 'id': 'ID', 'pl': 'PL'}
 
+Config.LocalStorage = {
+  path: './run/storage'
+}
+
 module.exports = Config

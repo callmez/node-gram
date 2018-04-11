@@ -1,5 +1,6 @@
 const setZeroTimeout = setTimeout
 const _ = require('lodash')
+const navigator = require('navigator')
 const { $q, $http, $timeout, $interval } = require('./angular')
 const {
   bigStringInt,

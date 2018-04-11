@@ -30,8 +30,7 @@ const CryptoWorker = require('./CryptoWorker')
 //   var chromeMatches = navigator.userAgent.match(/Chrome\/(\d+(\.\d+)?)/)
 //   var chromeVersion = chromeMatches && parseFloat(chromeMatches[1]) || false
 //   var xhrSendBuffer = !('ArrayBufferView' in window) && (chromeVersion > 0 && chromeVersion < 30)
-  var xhrSendBuffer = true
-  // delete $http.defaults.headers.post['Content-Type']
+  var xhrSendBuffer = false // Node 的buffer 和 chrome的 ArrayBuffer 有差异, 所以不发送buffer格式
   // delete $http.defaults.headers.common['Accept']
 
   function mtpSendPlainRequest (dcID, requestBuffer) {
@@ -412,6 +411,24 @@ const CryptoWorker = require('./CryptoWorker')
     for (var i = 0; i < 16; i++) {
       nonce.push(nextRandomInt(0xFF))
     }
+    // nonce = [
+    //   26,
+    //   237,
+    //   42,
+    //   61,
+    //   200,
+    //   155,
+    //   166,
+    //   119,
+    //   222,
+    //   76,
+    //   71,
+    //   131,
+    //   181,
+    //   116,
+    //   9,
+    //   39
+    // ]; // TODO DELETE
 
     if (!MtpDcConfigurator.chooseServer(dcID)) {
       return $q.reject(new Error('[MT] No server found for dc ' + dcID))
