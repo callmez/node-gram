@@ -1,4 +1,5 @@
 const CryptoJS = require('../vendor/cryptoJS/crypto')
+const { Zlib } = require('../vendor/zlib/gunzip.min')
 const {
   powMod,
   eGCD_,

@@ -3,6 +3,8 @@ const axios = require('axios')
 const Promise = require('bluebird')
 const toArrayBuffer = require('to-arraybuffer')
 
+Promise.config({ cancellation: true })
+
 // @see https://github.com/mattlewis92/angular-bluebird-promises
 
 // In regards to: https://github.com/petkaantonov/bluebird#for-library-authors
@@ -96,7 +98,8 @@ var $timeout = (fn, delay, invokeApply) => {
 }
 $timeout.cancel = function(promise) {
   if (promise && promise.$$timeoutId in deferreds) {
-    deferreds[promise.$$timeoutId].reject('canceled');
+    // deferreds[promise.$$timeoutId].reject('canceled');
+    deferreds[promise.$$timeoutId].promise.cancel();
     delete deferreds[promise.$$timeoutId];
     return clearTimeout(promise.$$timeoutId);
   }
