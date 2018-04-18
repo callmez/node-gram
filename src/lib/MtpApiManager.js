@@ -298,7 +298,7 @@ const MtpNetworkerFactory = require('./MtpNetworkerFactory')
 
   function mtpGetUserID () {
     return Storage.get('user_auth').then(function (auth) {
-      telegramMeNotify(auth && auth.id > 0 || false)
+      // telegramMeNotify(auth && auth.id > 0 || false)
       return auth.id || 0
     })
   }
