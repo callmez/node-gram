@@ -89,7 +89,8 @@ const MtpNetworkerFactory = require('./MtpNetworkerFactory')
     Storage.get(saveKeys).then(function (values) {
       Storage.clear().then(function () {
         var restoreObj = {}
-        angular.forEach(saveKeys, function (key, i) {
+        // angular.forEach(saveKeys, function (key, i) {
+        _.forEach(saveKeys, function (key, i) {
           var value = values[i]
           if (value !== false && value !== undefined) {
             restoreObj[key] = value
@@ -314,6 +315,8 @@ const MtpNetworkerFactory = require('./MtpNetworkerFactory')
     invokeApi: mtpInvokeApi,
     getNetworker: mtpGetNetworker,
     setUserAuth: mtpSetUserAuth,
-    logOut: mtpLogOut
+    logOut: mtpLogOut,
+
+    clear: mtpClearStorage,
   }
 // })
