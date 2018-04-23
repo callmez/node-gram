@@ -3,7 +3,7 @@ const axios = require('axios')
 const Promise = require('bluebird')
 const toArrayBuffer = require('to-arraybuffer')
 
-Promise.config({ cancellation: true })
+// Promise.config({ cancellation: true }) // TODO 解决 cannot enable cancellation after promises are in use
 
 // @see https://github.com/mattlewis92/angular-bluebird-promises
 
