@@ -3,9 +3,12 @@ const axios = require('axios')
 const Promise = require('bluebird')
 const toArrayBuffer = require('to-arraybuffer')
 
-// Promise.config({ cancellation: true }) // TODO 解决 cannot enable cancellation after promises are in use
-console.info('To use Promise.cancel you have to "Promise.config({ cancellation: true })" at first.')
-// @see https://github.com/mattlewis92/angular-bluebird-promises
+try {
+  Promise.config({ cancellation: true }) // TODO 解决 cannot enable cancellation after promises are in use
+} catch (e) {
+  console.error(e.getMessage());
+  console.warn('To use Promise.cancel you have to "Promise.config({ cancellation: true })" at first.')
+}
 
 function $q(resolve, reject) {
   return new Promise(resolve, reject);
