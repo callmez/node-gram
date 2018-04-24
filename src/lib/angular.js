@@ -4,11 +4,8 @@ const Promise = require('bluebird')
 const toArrayBuffer = require('to-arraybuffer')
 
 // Promise.config({ cancellation: true }) // TODO 解决 cannot enable cancellation after promises are in use
-
+console.info('To use Promise.cancel you have to "Promise.config({ cancellation: true })" at first.')
 // @see https://github.com/mattlewis92/angular-bluebird-promises
-
-// In regards to: https://github.com/petkaantonov/bluebird#for-library-authors
-// My reasoning behind not doing this is to prevent bundling bluebird code with this library
 
 function $q(resolve, reject) {
   return new Promise(resolve, reject);
