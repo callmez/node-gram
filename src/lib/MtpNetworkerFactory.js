@@ -680,6 +680,7 @@ const CryptoWorker = require('./CryptoWorker')
           responseType: 'arraybuffer',
           transformRequest: null
         })
+        if (Config.Modes.debug) console.log(dT(), "Post", message.msg_id);
         requestPromise = $http.post(url, requestData, options)
       } catch (e) {
         requestPromise = $q.reject(e)
