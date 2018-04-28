@@ -136,9 +136,9 @@ const CryptoWorker = require('./CryptoWorker')
       sentMessage.container
     )
     this.sentMessages[sentMessage.msg_id] = sentMessage
-    if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at UpdateSentMessage', sentMessageID);
-    delete self.sentMessages[sentMessageID]
 
+    delete self.sentMessages[sentMessageID]
+    if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at UpdateSentMessage', sentMessageID);
     return sentMessage
   }
 
@@ -572,8 +572,9 @@ const CryptoWorker = require('./CryptoWorker')
         _.forEach(noResponseMsgs, function (msgID) {
           if (self.sentMessages[msgID]) {
             var deferred = self.sentMessages[msgID].deferred
-            if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage after [parseResponse]', msgID);
+
             delete self.sentMessages[msgID]
+            if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage after [parseResponse]', msgID);
             deferred.resolve()
           }
         })
@@ -591,8 +592,9 @@ const CryptoWorker = require('./CryptoWorker')
         _.forEach(message.inner, function (msgID) {
           self.pendingMessages[msgID] = 0
         })
-        if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [sendEncryptedRequest Encrypted request failed]', message.msg_id);
+
         delete self.sentMessages[message.msg_id]
+        if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [sendEncryptedRequest Encrypted request failed]', message.msg_id);
       } else {
         self.pendingMessages[message.msg_id] = 0
       }
@@ -601,9 +603,10 @@ const CryptoWorker = require('./CryptoWorker')
       _.forEach(noResponseMsgs, function (msgID) {
         if (self.sentMessages[msgID]) {
           var deferred = self.sentMessages[msgID].deferred
-          if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [sendEncryptedRequest noResponseMsgs]', msgID);
+
           delete self.sentMessages[msgID]
           delete self.pendingMessages[msgID]
+          if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [sendEncryptedRequest noResponseMsgs]', msgID);
           deferred.reject()
         }
       })
@@ -685,13 +688,14 @@ const CryptoWorker = require('./CryptoWorker')
           responseType: 'arraybuffer',
           transformRequest: null
         })
-        if (Config.Modes.debug) console.log(dT(), 'Post', message.msg_id, message.inner, message);
+        if (Config.Modes.debug) console.log(dT(), 'Post', message.msg_id, message.inner);
         requestPromise = $http.post(url, requestData, options)
       } catch (e) {
         requestPromise = $q.reject(e)
       }
       return requestPromise.then(
         function (result) {
+          if (Config.Modes.debug) console.log(dT(), 'Response', message.msg_id, message.inner);
           if (!result.data || !result.data.byteLength) {
             return $q.reject(baseError)
           }
@@ -867,8 +871,8 @@ const CryptoWorker = require('./CryptoWorker')
       // console.log('clean iter', msgID, message)
       if (message.notContentRelated && self.pendingMessages[msgID] === undefined) {
         // console.log('clean notContentRelated', msgID)
-        if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [cleanupSent notContentRelated]', msgID);
         delete self.sentMessages[msgID]
+        if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [cleanupSent notContentRelated]', msgID);
       }
       else if (message.container) {
         for (var i = 0; i < message.inner.length; i++) {
@@ -879,8 +883,8 @@ const CryptoWorker = require('./CryptoWorker')
           }
         }
         // console.log('clean container', msgID)
-        if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [cleanupSent]', msgID);
         delete self.sentMessages[msgID]
+        if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [cleanupSent]', msgID);
       } else {
         notEmpty = true
       }
@@ -1057,8 +1061,9 @@ const CryptoWorker = require('./CryptoWorker')
               this.connectionInited = true
             }
           }
-          if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [rpc_result]', sentMessageID);
+
           delete this.sentMessages[sentMessageID]
+          if (Config.Modes.debug) console.log(dT(), 'DeletesentMessage at [rpc_result]', sentMessageID);
         }
         break
 
