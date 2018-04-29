@@ -239,7 +239,7 @@ const CryptoWorker = require('./CryptoWorker')
   }
 
   MtpNetworker.prototype.setMtApiCallChecker = function (message, method) {
-    var delay = 12 * 1000 // delay 120s
+    var delay = 120 * 1000 // delay 120s
     var maxCheckTimes = 2
     var times = maxCheckTimes
     var deferred = this.sentMessages[message.msg_id].deferred
