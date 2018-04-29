@@ -234,35 +234,33 @@ const CryptoWorker = require('./CryptoWorker')
 
     // return this.pushMessage(message, options)
     var promise = this.pushMessage(message, options)
-
-    this.setMtApiCallChecker(message, promise)
+    this.setMtApiCallChecker(message, method)
     return promise;
   }
 
-  MtpNetworker.prototype.setMtApiCallChecker = function (message, promise) {
-    var delay = 120 * 1000 // delay 120s
+  MtpNetworker.prototype.setMtApiCallChecker = function (message, method) {
+    var delay = 12 * 1000 // delay 120s
     var maxCheckTimes = 2
+    var times = maxCheckTimes
+    var deferred = this.sentMessages[message.msg_id].deferred
 
     var timer = setInterval(() => {
-      if (maxCheckTimes <= 0) {
+      if (times <= 0) {
         clearInterval(timer);
-        promise.reject(this.processError({
-          error_message: 'Api call resend ' + maxCheckTimes + ' times.'
-        }))
+        deferred.reject('Api call ' + method + ' resend ' + maxCheckTimes + ' times.')
       }
-      console.log(dT(), 'Check Api call', message)
+      console.log(dT(), 'Check Api call', method)
       if (this.sentMessages[message.msg_id]) {
         this.pushResend(message.msg_id);
-        maxCheckTimes--
       }
+      times--
     }, delay)
 
-    promise.then((result) => {
+    deferred.promise.then((result) => {
       clearInterval(timer);
       return result
     })
   }
-
 
   MtpNetworker.prototype.checkLongPoll = function (force) {
     var isClean = this.cleanupSent()
