@@ -251,8 +251,8 @@ const CryptoWorker = require('./CryptoWorker')
         }))
       }
       console.log(dT(), 'Check Api call', message)
-      if (this.sentMessages[messageID]) {
-        this.pushResend(messageID);
+      if (this.sentMessages[message.msg_id]) {
+        this.pushResend(message.msg_id);
         maxCheckTimes--
       }
     }, delay)
