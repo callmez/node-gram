@@ -250,7 +250,7 @@ const CryptoWorker = require('./CryptoWorker')
           error_message: 'Api call resend ' + maxCheckTimes + ' times.'
         }))
       }
-      console.log(dT(), 'Check Api call', method, params, messageID, seqNo)
+      console.log(dT(), 'Check Api call', message)
       if (this.sentMessages[messageID]) {
         this.pushResend(messageID);
         maxCheckTimes--
