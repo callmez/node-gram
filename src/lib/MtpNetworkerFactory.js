@@ -247,12 +247,10 @@ const CryptoWorker = require('./CryptoWorker')
     var timer = setInterval(() => {
       if (times <= 0) {
         clearInterval(timer);
-        deferred.reject('Api call ' + method + ' resend ' + maxCheckTimes + ' times.')
+        if (this.sentMessages[message.msg_id]) deferred.reject('Api call ' + method + ' resend ' + maxCheckTimes + ' times.')
       }
       console.log(dT(), 'Check Api call', method)
-      if (this.sentMessages[message.msg_id]) {
-        this.pushResend(message.msg_id);
-      }
+      if (this.sentMessages[message.msg_id]) this.pushResend(message.msg_id);
       times--
     }, delay)
 
