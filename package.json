@@ -1,11 +1,11 @@
 {
-  "name": "node-gram",
+  "name": "node-webogram",
   "version": "1.0.0",
   "description": "webogram for node",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/callmez/node-gram.git"
+    "url": "git+https://github.com/callmez/node-webogram.git"
   },
   "keywords": [
     "telegram",
@@ -14,9 +14,9 @@
   ],
   "author": "callme-z@qq.com",
   "bugs": {
-    "url": "https://github.com/callmez/node-gram/issues"
+    "url": "https://github.com/callmez/node-webogram/issues"
   },
-  "homepage": "https://github.com/callmez/node-gram#readme",
+  "homepage": "https://github.com/callmez/node-webogram#readme",
   "dependencies": {
     "lodash": "^4.17.5",
     "bluebird": "^3.5.1",
